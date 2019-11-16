@@ -1,0 +1,73 @@
+{
+  "class": "AS3",
+  "action": "deploy",
+  "persist": true,
+  "declaration": {
+    "class": "ADC",
+    "schemaVersion": "3.5.0",
+    "label": "autoscale_waf",
+    "id": "autoscale_waf",
+    "remark": "autoscale_waf",
+    "LOB_name": {
+      "class": "Tenant",
+      "Shared": {
+        "class": "Application",
+        "template": "shared",
+        "serviceAddress": {
+          "class": "Service_Address",
+          "virtualAddress": "0.0.0.0"
+        }
+      },
+      "http": {
+        "class": "Application",
+        "template": "http",
+        "serviceMain": {
+          "class": "Service_HTTP",
+          "virtualAddresses": [
+            {
+              "use": "/LOB_name/Shared/serviceAddress"
+            }
+          ],
+          "snat": "auto",
+          "pool": "pool",
+          "policyWAF": {
+            "use": "policyLowWaf"
+          },
+          "securityLogProfiles": [
+          {"bigip": "/Common/Log illegal requests"}
+          ]
+        },
+        "pool": {
+          "class": "Pool",
+          "monitors": [
+            "http"
+          ],
+          "members": [
+            {
+              "autoPopulate": true,
+              "servicePort": 80,
+              "addressDiscovery": "aws",
+              "updateInterval": 15,
+              "tagKey": "service",
+              "tagValue": "discovery",
+              "addressRealm": "private",
+              "region": "us-east-2"
+            }
+          ]
+        },
+        "policyLowWAF": {
+          "class": "WAF_Policy",
+          "url": "https://raw.githubusercontent.com/LeonardosGitHub/autoscaleWAF/master/terraform/wafPolicies/asm-policy-linux-low.xml"
+        },
+        "policyMedWAF": {
+          "class": "WAF_Policy",
+          "url": "https://raw.githubusercontent.com/LeonardosGitHub/autoscaleWAF/master/terraform/wafPolicies/asm-policy-linux-medium.xml"
+        },
+        "policyHighWAF": {
+          "class": "WAF_Policy",
+          "url": "https://raw.githubusercontent.com/LeonardosGitHub/autoscaleWAF/master/terraform/wafPolicies/asm-policy-linux-high.xml"
+        }
+      }
+    }
+  }
+}
