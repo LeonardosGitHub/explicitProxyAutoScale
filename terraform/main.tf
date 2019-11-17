@@ -185,7 +185,7 @@ resource "aws_instance" "example-a" {
 
 
   tags = {
-    Name = "web-az1.${count.index}: ${var.LOBname}"
+    Name = "web-az1.${count.index}: ${var.DeploymentSpecificName}"
     serviceDiscovery1 = "LOB1"
   }
 }
@@ -215,7 +215,7 @@ resource "aws_instance" "example-b" {
   EOF
 
   tags = {
-    Name              = "web-az2.${count.index}: ${var.LOBname}"
+    Name              = "web-az2.${count.index}: ${var.DeploymentSpecificName}"
     serviceDiscovery2 = "LOB2"
   }
 }

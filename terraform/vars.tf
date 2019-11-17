@@ -16,12 +16,12 @@ variable "aws_region" {
 }
 
 variable "bigip_port" {
-  description = "The BIG-IP load balancer port for HTTP requests"
+  description = "The BIG-IP explicit proxy port for proxy requests from client"
 }
 
-variable "web_server_port" {
-  description = "The port the web server will use for HTTP requests"
-}
+#variable "web_server_port" {
+#  description = "The port the web server will use for HTTP requests"
+#}
 
 variable "aws_keypair" {
   description = "The name of an existing key pair. In AWS Console: NETWORK & SECURITY -> Key Pairs"
@@ -38,8 +38,8 @@ variable "waf_emailid" {
   default     = "leonardo.simon@f5.com"
 }
 
-variable "LOBname" {
-  description = "LOBname"
+variable "DeploymentSpecificName" {
+  description = "Deployment specific description, used to name objects associated with this deployment"
   #default     = "secexample"
 }
 
