@@ -1496,6 +1496,7 @@
              "--signal ONBOARD_DONE",
              "-o /var/log/cloud/aws/onboard.log",
              "--install-ilx-package file:///config/cloud/f5-appsvcs-3.15.0-6.noarch.rpm",
+             "--install-ilx-package file:///config/cloud/f5-declarative-onboarding-1.8.0-2.noarch.rpm",
              "--host localhost",
              "--port 8443",
              "--user",
@@ -1850,6 +1851,12 @@
         "mode": "000755",
         "owner": "root",
         "source": "http://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/sourceDownloads/f5-appsvcs-3.15.0-6.noarch.rpm"
+       },
+       "/config/cloud/f5-declarative-onboarding-1.8.0-2.noarch.rpm": {
+        "group": "root",
+        "mode": "000755",
+        "owner": "root",
+        "source": "http://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/sourceDownloads/f5-declarative-onboarding-1.8.0-2.noarch.rpm"
        },
        "/config/cloud/f5-cloud-libs-aws.tar.gz": {
         "group": "root",
