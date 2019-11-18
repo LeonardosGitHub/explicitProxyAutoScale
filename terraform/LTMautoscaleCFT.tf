@@ -108,7 +108,15 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     applicationPoolTagKey   = "service"
     applicationPoolTagValue = "discovery"
     #policyLevel             = "medium"
-    declarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/as3/as3DeclarationExplictProxy.json"
+
+    #AS3 declaration
+    declarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/as3_DeclarationExplictProxy.json"
+
+    #DO declaration
+    DOdeclarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/DO_DeclarationExplictProxy.json"
+
+    #TS declaration
+    TSdeclarationUrl = ""
 
     #TAGS
     application = "f5app"

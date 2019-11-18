@@ -634,6 +634,8 @@
       "applicationPoolTagKey",
       "applicationPoolTagValue",
       "declarationUrl"
+      "DOdeclarationUrl"
+      "TSdeclarationUrl"
      ]
     },
     {
@@ -700,6 +702,12 @@
     },
     "declarationUrl": {
      "default": "AS3 Declaration URL"
+    },
+    "DOdeclarationUrl": {
+     "default": "DO Declaration URL"
+    },
+    "TSdeclarationUrl": {
+     "default": "TS Declaration URL"
     },
     "deploymentName": {
      "default": "Deployment Name"
@@ -876,6 +884,18 @@
   "declarationUrl": {
    "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$|^default$",
    "Default": "default",
+   "Description": "URL for the AS3 declaration JSON file to be deployed. If left at **default**, the recommended F5 application service configuration will be applied. Enter **none** to deploy without a service configuration.",
+   "Type": "String"
+  },
+  "DOdeclarationUrl": {
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$|^default$",
+   "Default": "none",
+   "Description": "URL for the DO declaration JSON file to be deployed. If left at **default**, the recommended F5 application service configuration will be applied. Enter **none** to deploy without a service configuration.",
+   "Type": "String"
+  },
+  "TSdeclarationUrl": {
+   "AllowedPattern": "^(http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$|^none$|^default$",
+   "Default": "none",
    "Description": "URL for the AS3 declaration JSON file to be deployed. If left at **default**, the recommended F5 application service configuration will be applied. Enter **none** to deploy without a service configuration.",
    "Type": "String"
   },
@@ -1497,6 +1517,7 @@
              "-o /var/log/cloud/aws/onboard.log",
              "--install-ilx-package file:///config/cloud/f5-appsvcs-3.15.0-6.noarch.rpm",
              "--install-ilx-package file:///config/cloud/f5-declarative-onboarding-1.8.0-2.noarch.rpm",
+             "--install-ilx-package file:///config/cloud/f5-telemetry-1.7.0-1.noarch.rpm",
              "--host localhost",
              "--port 8443",
              "--user",
@@ -1746,6 +1767,16 @@
             "Ref": "declarationUrl"
            },
            "'\n",
+           "DOdeclarationUrl='",
+           {
+            "Ref": "DOdeclarationUrl"
+           },
+           "'\n",
+           "TSdeclarationUrl='",
+           {
+            "Ref": "TSdeclarationUrl"
+           },
+           "'\n",
            "passwd=$(f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/decryptDataFromFile.js --data-file /config/cloud/aws/.adminPassword)\n",
            "payload='{\"class\":\"ADC\",\"schemaVersion\":\"3.0.0\",\"label\":\"autoscale_ltm\",\"id\":\"AUTOSCALE_LTM\",\"remark\":\"Autoscale LTM\",\"ltm\":{\"class\":\"Tenant\",\"Shared\":{\"class\":\"Application\",\"template\":\"shared\",\"serviceAddress\":{\"class\":\"Service_Address\",\"virtualAddress\":\"0.0.0.0\"}},\"http\":{\"class\":\"Application\",\"template\":\"http\",\"serviceMain\":{\"class\":\"Service_HTTP\",\"virtualAddresses\":[{\"use\":\"/ltm/Shared/serviceAddress\"}],\"serverTLS\":{\"bigip\":\"/Common/example-clientssl-profile\"},\"snat\":\"auto\",\"pool\":\"pool\"},\"pool\":{\"class\":\"Pool\",\"monitors\":[\"http\"],\"members\":[{\"autoPopulate\":true,\"hostname\":\"demo.example.com\",\"servicePort\":80,\"addressDiscovery\":\"aws\",\"updateInterval\":15,\"tagKey\":\"applicationPoolTagKey\",\"tagValue\":\"applicationPoolTagValue\",\"addressRealm\":\"private\",\"region\":\"us-west-2\"}]}}}}'\n"
           ]
@@ -1857,6 +1888,24 @@
         "mode": "000755",
         "owner": "root",
         "source": "http://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/sourceDownloads/f5-declarative-onboarding-1.8.0-2.noarch.rpm"
+       },
+       "/config/cloud/DOcustom_config": {
+        "group": "root",
+        "mode": "000755",
+        "owner": "root",
+        "source": "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/DO_DeclarationExplictProxy.json"
+       },
+       "/config/cloud/f5-telemetry-1.7.0-1.noarch.rpm": {
+        "group": "root",
+        "mode": "000755",
+        "owner": "root",
+        "source": "http://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/sourceDownloads/f5-telemetry-1.7.0-1.noarch.rpm"
+       },
+       "/config/cloud/TScustom_config": {
+        "group": "root",
+        "mode": "000755",
+        "owner": "root",
+        "source": "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/TS_DeclarationExplictProxy.json"
        },
        "/config/cloud/f5-cloud-libs-aws.tar.gz": {
         "group": "root",
