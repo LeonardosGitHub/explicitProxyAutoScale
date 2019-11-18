@@ -104,11 +104,11 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     applicationPort         = var.bigip_port
     restrictedSrcAddressApp = "0.0.0.0/0"
 
-    #appInternalDnsName      = "example.com"
-    #applicationPoolTagKey   = "service"
-    #applicationPoolTagValue = "discovery"
+    appInternalDnsName      = "example.com"
+    applicationPoolTagKey   = "service"
+    applicationPoolTagValue = "discovery"
     #policyLevel             = "medium"
-    declarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/as3/as3DeclarationLowWAF.json"
+    declarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/as3/as3DeclarationExplictProxy.json"
 
     #TAGS
     application = "f5app"
