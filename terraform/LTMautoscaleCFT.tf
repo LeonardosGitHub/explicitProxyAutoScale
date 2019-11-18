@@ -116,7 +116,7 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     DOdeclarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/DO_DeclarationExplictProxy.json"
 
     #TS declaration
-    TSdeclarationUrl = ""
+    TSdeclarationUrl = "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/TS_DeclarationExplictProxy.json"
 
     #TAGS
     application = "f5app"

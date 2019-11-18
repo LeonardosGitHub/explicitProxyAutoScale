@@ -1,38 +1,14 @@
 {
-  "class": "AS3",
-  "action": "deploy",
-  "persist": true,
-  "declaration": {
-    "class": "ADC",
-    "schemaVersion": "3.12.0",
-    "label": "autoscale_ltm_withExplicitProxy",
-    "id": "autoscale_ltm",
-    "remark": "autoscale_ltm",
-    "explicitProxyShared": {
-      "class": "Tenant",
-      "Shared": {
-        "class": "Application",
-        "template": "shared",
-        "serviceAddress": {
-          "class": "Service_Address",
-          "virtualAddress": "0.0.0.0"
+    "schemaVersion": "1.8.0",
+    "class": "Device",
+    "label": "Configuring System",
+    "async": false,
+    "Common": {
+        "class": "Tenant",
+        "mySystem": {
+            "class": "System",
+            "cliInactivityTimeout": 1200,
+            "consoleInactivityTimeout": 1200
         }
-      },
-      "explicitProxy": {
-        "class": "Application",
-        "template": "generic",
-        "explicitProxyVS": {
-          "class": "Service_Generic",
-          "virtualAddresses": [
-            {
-              "use": "/explicitProxyShared/Shared/serviceAddress"
-            }
-          ],
-          "virtualPort": 8080,
-          "snat": "auto",
-          "allowVlans": [{"bigip":"/Common/internal"}]
-        }
-      }
     }
-  }
 }

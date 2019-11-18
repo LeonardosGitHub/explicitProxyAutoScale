@@ -1,38 +1,23 @@
 {
-  "class": "AS3",
-  "action": "deploy",
-  "persist": true,
-  "declaration": {
-    "class": "ADC",
-    "schemaVersion": "3.12.0",
-    "label": "autoscale_ltm_withExplicitProxy",
-    "id": "autoscale_ltm",
-    "remark": "autoscale_ltm",
-    "explicitProxyShared": {
-      "class": "Tenant",
-      "Shared": {
-        "class": "Application",
-        "template": "shared",
-        "serviceAddress": {
-          "class": "Service_Address",
-          "virtualAddress": "0.0.0.0"
+    "class": "Telemetry",
+    "My_System": {
+        "class": "Telemetry_System",
+        "systemPoller": {
+            "interval": 60
         }
-      },
-      "explicitProxy": {
-        "class": "Application",
-        "template": "generic",
-        "explicitProxyVS": {
-          "class": "Service_Generic",
-          "virtualAddresses": [
-            {
-              "use": "/explicitProxyShared/Shared/serviceAddress"
-            }
-          ],
-          "virtualPort": 8080,
-          "snat": "auto",
-          "allowVlans": [{"bigip":"/Common/internal"}]
+    },
+    "My_Listener": {
+        "class": "Telemetry_Listener",
+        "port": 6514
+    },
+    "My_Consumer": {
+        "class": "Telemetry_Consumer",
+        "type": "Splunk",
+        "host": "192.0.2.1",
+        "protocol": "https",
+        "port": 8088,
+        "passphrase": {
+            "cipherText": "apikey"
         }
-      }
     }
-  }
 }

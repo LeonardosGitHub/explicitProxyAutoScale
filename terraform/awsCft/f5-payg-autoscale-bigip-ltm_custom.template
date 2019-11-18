@@ -633,8 +633,8 @@
       "appInternalDnsName",
       "applicationPoolTagKey",
       "applicationPoolTagValue",
-      "declarationUrl"
-      "DOdeclarationUrl"
+      "declarationUrl",
+      "DOdeclarationUrl",
       "TSdeclarationUrl"
      ]
     },
