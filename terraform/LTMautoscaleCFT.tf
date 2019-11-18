@@ -91,7 +91,7 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     customImageId           = "OPTIONAL"
 
     #AUTO SCALING CONFIGURATION
-    scalingMinSize          = 2
+    scalingMinSize          = 1
     scalingMaxSize          = 4
     highCpuThreshold        = 30
     lowCpuThreshold         = 20
