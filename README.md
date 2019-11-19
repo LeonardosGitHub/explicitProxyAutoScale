@@ -1,5 +1,3 @@
-# explicit Proxy autoscale
-
 # Create Autoscal Explicit Proxy cluster using Terraform
 
 ## Usage
