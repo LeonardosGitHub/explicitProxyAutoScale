@@ -8,6 +8,8 @@
    - Type in a deployment specific name
  - To destroy the cluster
    - terraform/terraform destroy
+ - AWS CLI
+   - you'll need AWS cli installed on your machine with access key & secret key
 
 ## Terraform
  - Creates the below items in us-east-2 region 
