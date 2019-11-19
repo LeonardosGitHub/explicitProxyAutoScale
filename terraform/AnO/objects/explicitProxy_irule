@@ -5,7 +5,7 @@ when HTTP_PROXY_REQUEST {
             }
         default {
             reject
-            log local0. "DENIED- URL: [HTTP::uri]"
+            log local0. "DENIED - URL: [HTTP::uri]"
             }
     }
 }  
