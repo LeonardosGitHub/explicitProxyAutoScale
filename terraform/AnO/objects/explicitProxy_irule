@@ -1,5 +1,5 @@
 when HTTP_PROXY_REQUEST {
-    switch [class match [string tolower [HTTP::uri]] contains explicitProxy_allowed_URLs_datagroup] {
+    switch [class match [string tolower [HTTP::uri]] contains Shared/explicitProxy_allowed_URLs_datagroup] {
         1 {
             log local0. "ALLOWED - URL: [HTTP::uri]"
             }
