@@ -13,7 +13,7 @@
 ############################################
 
 resource "aws_elb" "f5-autoscale-elb" {
-  name = "waf-${var.DeploymentSpecificName}"
+  name = "elb-${var.DeploymentSpecificName}"
 
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.elb.id]
@@ -37,15 +37,8 @@ resource "aws_security_group" "elb" {
   vpc_id = aws_vpc.terraform-vpc-LOBexample.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = var.restrictedSrcAddress
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = var.restrictedSrcAddress
   }
@@ -63,8 +56,8 @@ resource "aws_security_group" "elb" {
 # DEPLOYING CFT                            #
 ############################################
 
-resource "aws_cloudformation_stack" "f5-autoscale-waf" {
-  name         = "waf-${var.DeploymentSpecificName}-${aws_vpc.terraform-vpc-LOBexample.id}"
+resource "aws_cloudformation_stack" "f5-autoscale-ExplicitProxy" {
+  name         = "cft-${var.DeploymentSpecificName}-${aws_vpc.terraform-vpc-LOBexample.id}"
   capabilities = ["CAPABILITY_IAM"]
 
   parameters = {
@@ -97,7 +90,7 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     lowCpuThreshold         = 20
     scaleDownBytesThreshold = 20000
     scaleUpBytesThreshold   = 45000
-    notificationEmail       = var.waf_emailid != "" ? var.waf_emailid : var.emailid
+    notificationEmail       = var.cft_emailid != "" ? var.cft_emailid : var.emailid
 
     #VIRTUAL SERVICE CONFIGURATION
     virtualServicePort      = var.bigip_port

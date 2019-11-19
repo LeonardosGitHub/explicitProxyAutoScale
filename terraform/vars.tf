@@ -33,8 +33,8 @@ variable "emailid" {
   default     = "leonardo.simon@f5.com"
 }
 
-variable "waf_emailid" {
-  description = "waf_emailid"
+variable "cft_emailid" {
+  description = "cft_emailid"
   default     = "leonardo.simon@f5.com"
 }
 

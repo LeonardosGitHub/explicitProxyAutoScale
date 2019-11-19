@@ -121,7 +121,7 @@ resource "aws_main_route_table_association" "association-subnet" {
 ###########################################
 # BUILDING SECURITY GROUP FOR WEB SERVERS #
 ###########################################
-
+/*
 resource "aws_security_group" "instance" {
   name   = "terraform-example-instance-LOBexample"
   vpc_id = aws_vpc.terraform-vpc-LOBexample.id
@@ -158,12 +158,12 @@ resource "aws_security_group" "instance" {
     create_before_destroy = true
   }
 }
-
+*/
 #################################
 # BUILDING WEB SERVER IN AZ A #
 #################################
 
-
+/*
 resource "aws_instance" "example-a" {
   count = 1
 
@@ -219,3 +219,4 @@ resource "aws_instance" "example-b" {
     serviceDiscovery2 = "LOB2"
   }
 }
+*/

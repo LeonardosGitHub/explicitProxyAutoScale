@@ -52,19 +52,19 @@ output "managementSubnetAz2" {
   value = aws_subnet.f5-management-b.id
 }
 
+output "restrictedSrcAddress" {
+  value = var.restrictedSrcAddress
+}
+/*
 output "SecurityGroupforWebServers" {
   value = aws_security_group.instance.id
 }
-
-output "restrictedSrcAddress" {
-  value = "0.0.0.0/0"
+output "ssl_certificate_id" {
+  value = aws_iam_server_certificate.elb_cert.arn
 }
 
-#output "ssl_certificate_id" {
-#  value = aws_iam_server_certificate.elb_cert.arn
-#}
+output "aws_alias" {
+  value = var.aws_alias
+}
 
-#output "aws_alias" {
-#  value = var.aws_alias
-#}
-
+*/
