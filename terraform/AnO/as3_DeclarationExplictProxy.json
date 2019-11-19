@@ -25,7 +25,8 @@
                     {"key": "google.com"},
                     {"key": "f5.com"},
                     {"key": "nginx.com"},
-                    {"key": "chase.com"}
+                    {"key": "chase.com"},
+                    {"key": "eunops.org"}
                 ]
         },
         "explicitProxy_irule": {
