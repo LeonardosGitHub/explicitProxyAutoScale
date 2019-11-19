@@ -1,4 +1,4 @@
-# Create Autoscal Explicit Proxy cluster using Terraform
+# Create BIG-IP Autoscale Explicit Proxy cluster using Terraform
 
 ## Usage
  - To create the cluster
