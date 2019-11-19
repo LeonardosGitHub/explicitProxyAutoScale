@@ -17,7 +17,7 @@
           "class": "Service_Address",
           "virtualAddress": "0.0.0.0"
         },
-        "allowed_URLs": {
+        "explicitProxy_allowed_URLs_datagroup": {
                 "class": "Data_Group",
                 "keyDataType": "string",
                 "records": [
@@ -53,7 +53,8 @@
           "virtualPort": 8080,
           "profileHTTP": {"use": "explicitProxyhttp_profile"},
           "snat": "auto",
-          "allowVlans": [{"bigip":"/Common/internal"}]
+          "allowVlans": [{"bigip":"/Common/internal"}],
+          "iRules": ["/Common/Shared/explicitProxy_irule"]
         },
         "explicitProxyhttp_profile": {
           "class": "HTTP_Profile",
