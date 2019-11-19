@@ -31,7 +31,7 @@
         "explicitProxy_irule": {
           "class": "iRule",
           "iRule": {
-            "url": "https://repo.webteam.corp.com/irule.txt"
+            "url": "http://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/objects/explicitProxy_irule"
           }
         }
       }
