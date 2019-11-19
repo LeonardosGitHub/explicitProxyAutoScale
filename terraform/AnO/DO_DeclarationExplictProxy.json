@@ -9,6 +9,17 @@
             "class": "System",
             "cliInactivityTimeout": 1200,
             "consoleInactivityTimeout": 1200
+        },
+        "pipelineUser": {
+            "class": "User",
+            "userType": "regular",
+            "password": "myPass1word",
+            "shell": "bash",
+            "partitionAccess": {
+                "all-partitions": {
+                    "role": "admin"
+                }
+            }
         }
     }
 }
