@@ -16,7 +16,7 @@
    - Internet Gateway
    - Routing
    - ELB using tcp at port 8080
-   - Autoscale BIG-IP cluster configured for Explict Proxy at port 8080
+   - Autoscale BIG-IP cluster configured for Explicit Proxy at port 8080
      - DO, AS3, and TS is deployed and used to configure the device.
 
 
