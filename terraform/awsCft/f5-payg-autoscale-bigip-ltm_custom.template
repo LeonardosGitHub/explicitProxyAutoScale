@@ -1585,6 +1585,8 @@
            ". /config/cloud/aws/onboard_config_vars\n",
            "tmsh create sys icall script uploadMetrics definition { exec /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs-aws/scripts/reportMetrics.sh }\n",
            "tmsh create sys icall handler periodic /Common/metricUploadHandler { first-occurrence now interval 60 script /Common/uploadMetrics }\n",
+           "tmsh create net tunnels tunnel explicitProxy_tunnel { profile tcp-forward }\n",
+           "tmsh create net dns-resolver explicitProxy_resolver { forward-zones replace-all-with { . { nameservers replace-all-with { 8.8.8.8:domain { } } } } route-domain 0 }\n",
            "tmsh save /sys config\n",
            "echo 'Attempting to Join or Initiate Autoscale Cluster' \n",
            "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/autoscale.js --cloud aws --provider-options s3Bucket:${s3Bucket},sqsUrl:${sqsUrl},mgmtPort:${managementGuiPort} --host localhost --port ${managementGuiPort} --user ${adminUsername} --password-url file:///config/cloud/aws/.adminPassword --password-encrypted --device-group autoscale-group --block-sync -c join --log-level silly --output /var/log/cloud/aws/autoscale.log \n",
