@@ -8,7 +8,7 @@
     "label": "autoscale_ltm_withExplicitProxy",
     "id": "autoscale_ltm",
     "remark": "autoscale_ltm",
-    "explicitProxyShared": {
+    "Common": {
       "class": "Tenant",
       "Shared": {
         "class": "Application",
@@ -16,21 +16,73 @@
         "serviceAddress": {
           "class": "Service_Address",
           "virtualAddress": "0.0.0.0"
+        },
+        "allowed_URLs": {
+                "class": "Data_Group",
+                "keyDataType": "string",
+                "records": [
+                    {"key": "example.com"},
+                    {"key": "google.com"},
+                    {"key": "f5.com"},
+                    {"key": "nginx.com"},
+                    {"key": "chase.com"}
+                ]
+        },
+        "explicitProxy_irule": {
+          "class": "iRule",
+          "iRule": {
+            "url": "https://repo.webteam.corp.com/irule.txt"
+          }
         }
-      },
+      }
+    },
+    "ExplicitProxy" : {
+      "class": "Tenant",
       "explicitProxy": {
         "class": "Application",
         "template": "generic",
         "explicitProxyVS": {
-          "class": "Service_Generic",
+          "class": "Service_HTTP",
+          "layer4": "tcp",
           "virtualAddresses": [
             {
-              "use": "/explicitProxyShared/Shared/serviceAddress"
+              "use": "/Common/Shared/serviceAddress"
             }
           ],
+          "persistenceMethods": [],
           "virtualPort": 8080,
+          "profileHTTP": {"use": "explicitProxyhttp_profile"},
           "snat": "auto",
           "allowVlans": [{"bigip":"/Common/internal"}]
+        },
+        "explicitProxyhttp_profile": {
+          "class": "HTTP_Profile",
+          "proxyType": "explicit",
+          "requestChunking": "rechunk",
+          "responseChunking": "rechunk",
+          "resolver": {"bigip": "/Common/explicitProxy_resolver"},
+          "tunnelName": "/Common/explicitProxy_tunnel"
+        },
+        "explicitProxyL4_profile": {
+          "class": "L4_Profile",
+          "looseClose": true,
+          "looseInitialization": true
+        },
+        "explicitProxy_wildcard_VS": {
+          "class": "Service_L4",
+          "layer4": "any",
+          "virtualAddresses": [
+            {
+              "use": "/Common/Shared/serviceAddress"
+            }
+          ],
+          "persistenceMethods": [],
+          "translateServerPort": false,
+          "translateServerAddress": false,
+          "virtualPort": 0,
+          "profileL4": {"use": "explicitProxyL4_profile"},
+          "snat": "auto",
+          "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}]
         }
       }
     }
