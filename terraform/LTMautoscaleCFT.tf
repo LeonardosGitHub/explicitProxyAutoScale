@@ -34,7 +34,7 @@ resource "aws_elb" "f5-autoscale-elb" {
 
 resource "aws_security_group" "elb" {
   name   = "terraform-example-elb"
-  vpc_id = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id = aws_vpc.terraform-vpc-ExpcitPxy.id
 
   ingress {
     from_port   = 8080
@@ -57,13 +57,13 @@ resource "aws_security_group" "elb" {
 ############################################
 
 resource "aws_cloudformation_stack" "f5-autoscale-ExplicitProxy" {
-  name         = "cft-${var.DeploymentSpecificName}-${aws_vpc.terraform-vpc-LOBexample.id}"
+  name         = "cft-${var.DeploymentSpecificName}-${aws_vpc.terraform-vpc-ExpcitPxy.id}"
   capabilities = ["CAPABILITY_IAM"]
 
   parameters = {
     #DEPLOYMENT
     deploymentName           = "explicitProxy-${var.DeploymentSpecificName}"
-    Vpc                      = aws_vpc.terraform-vpc-LOBexample.id
+    Vpc                      = aws_vpc.terraform-vpc-ExpcitPxy.id
     availabilityZones        = "${var.aws_region}a,${var.aws_region}b"
     subnets                  = "${aws_subnet.public-a.id},${aws_subnet.public-b.id}"
     bigipElasticLoadBalancer = aws_elb.f5-autoscale-elb.name

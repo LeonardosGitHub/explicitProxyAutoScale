@@ -5,7 +5,7 @@ output "elb_dns_name" {
 }
 
 output "vpc-id" {
-  value = aws_vpc.terraform-vpc-LOBexample.id
+  value = aws_vpc.terraform-vpc-ExpcitPxy.id
 }
 
 output "vpc-public-a" {

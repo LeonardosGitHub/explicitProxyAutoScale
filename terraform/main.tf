@@ -6,7 +6,7 @@ provider "aws" {
 # BUILDING THE VPC FOR THE ENVIRONMENT #
 ########################################
 
-resource "aws_vpc" "terraform-vpc-LOBexample" {
+resource "aws_vpc" "terraform-vpc-ExpcitPxy" {
   cidr_block           = "10.0.0.0/16"
   instance_tenancy     = "default"
   enable_dns_support   = "true"
@@ -23,7 +23,7 @@ resource "aws_vpc" "terraform-vpc-LOBexample" {
 #################################################
 
 resource "aws_subnet" "f5-management-a" {
-  vpc_id                  = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id                  = aws_vpc.terraform-vpc-ExpcitPxy.id
   cidr_block              = "10.0.101.0/24"
   map_public_ip_on_launch = "true"
   availability_zone       = "${var.aws_region}a"
@@ -34,7 +34,7 @@ resource "aws_subnet" "f5-management-a" {
 }
 
 resource "aws_subnet" "f5-management-b" {
-  vpc_id                  = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id                  = aws_vpc.terraform-vpc-ExpcitPxy.id
   cidr_block              = "10.0.102.0/24"
   map_public_ip_on_launch = "true"
   availability_zone       = "${var.aws_region}b"
@@ -45,7 +45,7 @@ resource "aws_subnet" "f5-management-b" {
 }
 
 resource "aws_subnet" "public-a" {
-  vpc_id                  = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id                  = aws_vpc.terraform-vpc-ExpcitPxy.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = "false"
   availability_zone       = "${var.aws_region}a"
@@ -56,7 +56,7 @@ resource "aws_subnet" "public-a" {
 }
 
 resource "aws_subnet" "private-a" {
-  vpc_id                  = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id                  = aws_vpc.terraform-vpc-ExpcitPxy.id
   cidr_block              = "10.0.100.0/24"
   map_public_ip_on_launch = "false"
   availability_zone       = "${var.aws_region}a"
@@ -67,7 +67,7 @@ resource "aws_subnet" "private-a" {
 }
 
 resource "aws_subnet" "public-b" {
-  vpc_id                  = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id                  = aws_vpc.terraform-vpc-ExpcitPxy.id
   cidr_block              = "10.0.2.0/24"
   map_public_ip_on_launch = "false"
   availability_zone       = "${var.aws_region}b"
@@ -78,7 +78,7 @@ resource "aws_subnet" "public-b" {
 }
 
 resource "aws_subnet" "private-b" {
-  vpc_id                  = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id                  = aws_vpc.terraform-vpc-ExpcitPxy.id
   cidr_block              = "10.0.200.0/24"
   map_public_ip_on_launch = "false"
   availability_zone       = "${var.aws_region}b"
@@ -93,7 +93,7 @@ resource "aws_subnet" "private-b" {
 ######################################
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id = aws_vpc.terraform-vpc-ExpcitPxy.id
 
   tags = {
     Name = "terraform_internet-gateway"
@@ -101,7 +101,7 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route_table" "rt1" {
-  vpc_id = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id = aws_vpc.terraform-vpc-ExpcitPxy.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -114,7 +114,7 @@ resource "aws_route_table" "rt1" {
 }
 
 resource "aws_main_route_table_association" "association-subnet" {
-  vpc_id         = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id         = aws_vpc.terraform-vpc-ExpcitPxy.id
   route_table_id = aws_route_table.rt1.id
 }
 
@@ -124,7 +124,7 @@ resource "aws_main_route_table_association" "association-subnet" {
 /*
 resource "aws_security_group" "instance" {
   name   = "terraform-example-instance-LOBexample"
-  vpc_id = aws_vpc.terraform-vpc-LOBexample.id
+  vpc_id = aws_vpc.terraform-vpc-ExpcitPxy.id
 
   ingress {
     from_port   = var.bigip_port

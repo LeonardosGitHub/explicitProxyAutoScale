@@ -17,6 +17,7 @@ variable "aws_region" {
 
 variable "bigip_port" {
   description = "The BIG-IP explicit proxy port for proxy requests from client"
+  default     = 8080
 }
 
 #variable "web_server_port" {
