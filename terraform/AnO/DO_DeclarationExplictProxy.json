@@ -13,7 +13,7 @@
         "pipelineUser": {
             "class": "User",
             "userType": "regular",
-            "password": "myPass1word",
+            "password": "ch@ng3mEA$@p",
             "shell": "bash",
             "partitionAccess": {
                 "all-partitions": {
