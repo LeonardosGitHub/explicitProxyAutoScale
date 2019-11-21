@@ -1590,7 +1590,7 @@
                       "tmsh install sys crypto cert SSL_FORWARD_PROXY.crt from-url https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/certs/SSL_FORWARD_PROXY.crt",
                       "tmsh install sys crypto key SSL_FORWARD_PROXY.key from-url https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/certs/SSL_FORWARD_PROXY.key",
                       "tmsh create ltm profile client-ssl serverTLS_SSL_FORWARD_PROXY {cert-key-chain replace-all-with { SSL_FWD_ExProxy { cert SSL_FORWARD_PROXY.crt key SSL_FORWARD_PROXY.key  usage CA} default {cert default.crt key default.key } } cert-lookup-by-ipaddr-port disabled defaults-from clientssl mode enabled ssl-forward-proxy enabled }",
-                      "tmsh create ltm profile server-ssl serverssl_SSL_FORWARD_PROXY { defaults-from serverssl ssl-forward-proxy enabled }",
+                      "tmsh create ltm profile server-ssl clientTLS_SSL_FORWARD_PROXY { defaults-from serverssl ssl-forward-proxy enabled }",
                       "tmsh save /sys config\n",
                       "echo 'Attempting to Join or Initiate Autoscale Cluster' \n",
                       "f5-rest-node /config/cloud/aws/node_modules/@f5devcentral/f5-cloud-libs/scripts/autoscale.js --cloud aws --provider-options s3Bucket:${s3Bucket},sqsUrl:${sqsUrl},mgmtPort:${managementGuiPort} --host localhost --port ${managementGuiPort} --user ${adminUsername} --password-url file:///config/cloud/aws/.adminPassword --password-encrypted --device-group autoscale-group --block-sync -c join --log-level silly --output /var/log/cloud/aws/autoscale.log \n",

@@ -101,8 +101,8 @@
           "profileHTTP": {"bigip": "/Common/http"},
           "snat": "auto",
           "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}],
-          "clientTLS": {"bigip": "/Common/serverssl_SSL_FORWARD_PROXY"},
-          "serverTLS": {"bigip": "/Common/clientssl_SSL_FORWARD_PROXY"}
+          "clientTLS": {"bigip": "/Common/clientTLS_SSL_FORWARD_PROXY"},
+          "serverTLS": {"bigip": "/Common/serverTLS_SSL_FORWARD_PROXY"}
         }
       }
     }
