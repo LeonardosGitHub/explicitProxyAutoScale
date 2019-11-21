@@ -85,6 +85,24 @@
           "profileL4": {"use": "explicitProxyL4_profile"},
           "snat": "auto",
           "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}]
+        },
+        "explicitProxy_HTTPS_VS": {
+          "class": "Service_HTTPS",
+          "layer4": "tcp",
+          "virtualAddresses": [
+            {
+              "use": "/Common/Shared/serviceAddress"
+            }
+          ],
+          "persistenceMethods": [],
+          "translateServerPort": false,
+          "translateServerAddress": false,
+          "virtualPort": 443,
+          "profileHTTP": {"bigip": "/Common/http"},
+          "snat": "auto",
+          "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}],
+          "clientTLS": {"bigip": "/Common/serverssl_SSL_FORWARD_PROXY"},
+          "serverTLS": {"bigip": "/Common/clientssl_SSL_FORWARD_PROXY"}
         }
       }
     }
