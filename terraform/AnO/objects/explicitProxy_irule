@@ -4,8 +4,8 @@ when HTTP_PROXY_REQUEST {
             log local0. "ALLOWED - URL: [HTTP::uri]"
             }
         default {
-            reject
-            log local0. "DENIED - URL: [HTTP::uri]"
+            log local0. "DENIED - URL: [HTTP::uri] [client_addr]"
+            HTTP::respond 403
             }
     }
-}  
+}

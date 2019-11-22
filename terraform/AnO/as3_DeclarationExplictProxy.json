@@ -89,6 +89,7 @@
         "explicitProxy_HTTPS_VS": {
           "class": "Service_HTTPS",
           "layer4": "tcp",
+          "redirect80": false,
           "virtualAddresses": [
             {
               "use": "/Common/Shared/serviceAddress"
