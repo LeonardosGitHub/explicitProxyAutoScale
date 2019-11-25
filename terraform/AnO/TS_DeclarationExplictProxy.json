@@ -12,12 +12,13 @@
     },
     "My_Consumer": {
         "class": "Telemetry_Consumer",
-        "type": "Splunk",
-        "host": "192.0.2.1",
-        "protocol": "https",
-        "port": 8088,
+        "type": "AWS_CloudWatch",
+        "region": "us-east-2",
+        "logGroup": "autoscaleExplicitProxyLeonardo",
+        "logStream": "default",
+        "username": "accesskey",
         "passphrase": {
-            "cipherText": "apikey"
+            "cipherText": "secretkey"
         }
     }
 }

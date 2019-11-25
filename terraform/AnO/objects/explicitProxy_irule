@@ -1,10 +1,12 @@
 when HTTP_PROXY_REQUEST {
+    set hslPrep "hostname=\"$static::tcl_platform(machine)\",client_ip=\"[IP::client_addr]\",server_ip=\"[IP::local_addr]\",http_method=\"[HTTP::method]\",http_host=\"[HTTP::uri]\",virtual_name=\"[virtual name]\",event_timestamp=\"[clock seconds]\""
+    set hsl [HSL::open -proto TCP -pool Shared/telemetry_pool]
     switch [class match [string tolower [HTTP::uri]] contains Shared/explicitProxy_allowed_URLs_datagroup] {
         1 {
-            log local0. "ALLOWED - URL: [HTTP::uri]"
+            HSL::send $hsl "event_source=\"ALLOWED_request_logging\",$hslPrep"
             }
         default {
-            log local0. "DENIED - URL: [HTTP::uri] [client_addr]"
+            HSL::send $hsl "event_source=\"DENIED_request_logging\",$hslPrep"
             HTTP::respond 403
             }
     }
