@@ -34,6 +34,47 @@
           "iRule": {
             "url": "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/objects/explicitProxy_irule"
           }
+        },
+        "telemetry_local_rule": {
+                "remark": "Only required when TS is a local listener",
+                "class": "iRule",
+                "iRule": "when CLIENT_ACCEPTED {\n  node 127.0.0.1 6514\n}"
+        },
+        "telemetry_local": {
+                "remark": "Only required when TS is a local listener",
+                "class": "Service_TCP",
+                "virtualAddresses": [
+                    "255.255.255.254"
+                ],
+                "virtualPort": 6514,
+                "iRules": [
+                    "telemetry_local_rule"
+                ]
+        },
+        "telemetry_pool": {
+                "class": "Pool",
+                "members": [
+                    {
+                        "enable": true,
+                        "serverAddresses": [
+                            "255.255.255.254"
+                        ],
+                        "servicePort": 6514
+                    }
+                ],
+                "monitors": [
+                    {
+                        "bigip": "/Common/tcp"
+                    }
+                ]
+        },
+        "telemetry_hsl": {
+                "class": "Log_Destination",
+                "type": "remote-high-speed-log",
+                "protocol": "tcp",
+                "pool": {
+                    "use": "telemetry_pool"
+                }
         }
       }
     },
