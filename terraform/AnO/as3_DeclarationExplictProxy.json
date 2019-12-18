@@ -22,6 +22,7 @@
                 "keyDataType": "string",
                 "records": [
                     {"key": "example.com"},
+                    {"key": "."},
                     {"key": "google.com"},
                     {"key": "f5.com"},
                     {"key": "nginx.com"},
@@ -32,7 +33,13 @@
         "explicitProxy_irule": {
           "class": "iRule",
           "iRule": {
-            "url": "https://raw.githubusercontent.com/LeonardosGitHub/explicitProxyAutoScale/master/terraform/AnO/objects/explicitProxy_irule"
+            "base64": "d2hlbiBDTElFTlRfQUNDRVBURUQgewogICAgc2V0IGhzbCBbSFNMOjpvcGVuIC1wcm90byBUQ1AgLXBvb2wgU2hhcmVkL3RlbGVtZXRyeV9wb29sXQogICAgc2V0IGhzbF9jbGllbnRBY2NlcHQgImxvZ1R5cGU9XCJQcm94eUxvZ1wiLGV2ZW50VGltZXN0YW1wPVwiW2Nsb2NrIHNlY29uZHNdXCIsYmlnaXBIb3N0bmFtZT1cIiRzdGF0aWM6OnRjbF9wbGF0Zm9ybShtYWNoaW5lKVwiLGNsaWVudElwPVwiW0lQOjpyZW1vdGVfYWRkciBjbGllbnRzaWRlXVwiLGNsaWVudFBvcnQ9XCJbVENQOjpjbGllbnRfcG9ydF1cIixwcm94eUlwPVwiW0lQOjpsb2NhbF9hZGRyIGNsaWVudHNpZGVdXCIscHJveHlQb3J0PVwiW1RDUDo6bG9jYWxfcG9ydCBjbGllbnRzaWRlXVwiLHZpcnR1YWxOYW1lPVwiW3ZpcnR1YWwgbmFtZV1cIixieXRlc1RvQ2xpZW50PVwiW0lQOjpzdGF0cyBieXRlcyBvdXRdXCIsYnl0ZXNUb1Byb3h5PVwiW0lQOjpzdGF0cyBieXRlcyBpbl1cIiIKfQoKd2hlbiBIVFRQX1BST1hZX1JFUVVFU1QgewogICAgc2V0IGhzbF9odHRwUHJveHlSZXEgInBvcnRSZXFCeUNsaWVudD1cIltVUkk6OnBvcnQgW0hUVFA6OnVyaV1dXCIsaHR0cEhvc3Q9XCJbSFRUUDo6dXJpXVwiLGh0dHBNZXRob2Q9XCJbSFRUUDo6bWV0aG9kXVwiLGh0dHBWZXJzaW9uPVwiW0hUVFA6OnZlcnNpb25dXCIiCiAgICBzd2l0Y2ggW2NsYXNzIG1hdGNoIFtzdHJpbmcgdG9sb3dlciBbSFRUUDo6dXJpXV0gY29udGFpbnMgU2hhcmVkL2V4cGxpY2l0UHJveHlfYWxsb3dlZF9VUkxzX2RhdGFncm91cF0gewogICAgICAgIDEgewogICAgICAgICAgICBIU0w6OnNlbmQgJGhzbCAiJGhzbF9jbGllbnRBY2NlcHQsJGhzbF9odHRwUHJveHlSZXEsd2hpdGVsaXN0PVwiQUxMT1dFRFwiIgogICAgICAgICAgICB9CiAgICAgICAgZGVmYXVsdCB7CiAgICAgICAgICAgIEhTTDo6c2VuZCAkaHNsICIkaHNsX2NsaWVudEFjY2VwdCwkaHNsX2h0dHBQcm94eVJlcSx3aGl0ZWxpc3Q9XCJERU5JRURcIiIKICAgICAgICAgICAgSFRUUDo6cmVzcG9uZCA0MDMKICAgICAgICAgICAgfQogICAgfQp9"
+          }
+        },
+        "explicitHttps_irule": {
+          "class": "iRule",
+          "iRule": {
+            "base64": "d2hlbiBDTElFTlRfQUNDRVBURUQgewogICAgc2V0IGhzbCBbSFNMOjpvcGVuIC1wcm90byBUQ1AgLXBvb2wgU2hhcmVkL3RlbGVtZXRyeV9wb29sXQogICAgc2V0IGhzbF9jbGllbnRBY2NlcHQgImxvZ1R5cGU9XCJodHRwc0xvZ1wiLGV2ZW50VGltZXN0YW1wPVwiW2Nsb2NrIHNlY29uZHNdXCIsYmlnaXBIb3N0bmFtZT1cIiRzdGF0aWM6OnRjbF9wbGF0Zm9ybShtYWNoaW5lKVwiLGNsaWVudElwPVwiW0lQOjpyZW1vdGVfYWRkciBjbGllbnRzaWRlXVwiLGNsaWVudFBvcnQ9XCJbVENQOjpjbGllbnRfcG9ydF1cIixwcm94eUlwPVwiW0lQOjpsb2NhbF9hZGRyIGNsaWVudHNpZGVdXCIscHJveHlQb3J0PVwiW1RDUDo6bG9jYWxfcG9ydCBjbGllbnRzaWRlXVwiLHZpcnR1YWxOYW1lPVwiW3ZpcnR1YWwgbmFtZV1cIixieXRlc1RvQ2xpZW50PVwiW0lQOjpzdGF0cyBieXRlcyBvdXRdXCIsYnl0ZXNUb1Byb3h5PVwiW0lQOjpzdGF0cyBieXRlcyBpbl1cIiIKfQp3aGVuIFNFUlZFUlNTTF9TRVJWRVJDRVJUIHsKICAgIHNldCBoc2xfc2VydmVyc3NsU2VydmVyY2VydCAic3NsQ2lwaGVyTmFtZT1cIltTU0w6OmNpcGhlciBuYW1lXVwiLHNzbENpcGhlckJpdHM9XCJbU1NMOjpjaXBoZXIgYml0c11cIixzc2xDaXBoZXJWZXJzaW9uPVwiW1NTTDo6Y2lwaGVyIHZlcnNpb25dXCIsc3NsQ2VydFZhbGlkPVwiW1g1MDk6OnZlcmlmeV9jZXJ0X2Vycm9yX3N0cmluZyBbU1NMOjp2ZXJpZnlfcmVzdWx0XV1cIiIKfQp3aGVuIEhUVFBfUkVRVUVTVCB7CiAgICBzZXQgaHNsX2h0dHBSZXF1ZXN0ICJzZXJ2ZXJJUD1cIltJUDo6bG9jYWxfYWRkcl1cIixzZXJ2ZXJQb3J0PVwiW1RDUDo6bG9jYWxfcG9ydF1cIixodHRwTWV0aG9kPVwiW0hUVFA6Om1ldGhvZF1cIixodHRwVmVyc2lvbj1cIltIVFRQOjp2ZXJzaW9uXVwiLGh0dHBVcmk9XCJbSFRUUDo6dXJpXVwiLGh0dHBRdWVyeT1cIltIVFRQOjpxdWVyeV1cIixoZWFkZXJIb3N0PVwiW0hUVFA6Omhvc3RdXCIsaGVhZGVyWGZmPVwiW0hUVFA6OmhlYWRlciBYLWZvcndhcmVkLVhGRl1cIixoZWFkZXJDb250ZW50VHlwZT1cIltIVFRQOjpoZWFkZXIgQ29udGVudC1UeXBlXVwiLGhlYWRlclJlZmVyZXI9XCJbSFRUUDo6aGVhZGVyIFJlZmVyZXJdXCIsaGVhZGVyVXNlckFnZW50PVwiW0hUVFA6OmhlYWRlciBVc2VyLUFnZW50XVwiIgp9CndoZW4gSFRUUF9SRVNQT05TRSB7CiAgICBzZXQgaHNsX2h0dHBSZXNwb25zZSAiaHR0cFN0YXR1cz1cIltIVFRQOjpzdGF0dXNdXCIiCiAgICBIU0w6OnNlbmQgJGhzbCAiJGhzbF9jbGllbnRBY2NlcHQsJGhzbF9zZXJ2ZXJzc2xTZXJ2ZXJjZXJ0LCRoc2xfaHR0cFJlcXVlc3QsJGhzbF9odHRwUmVzcG9uc2UiCn0="
           }
         },
         "telemetry_local_rule": {
@@ -144,9 +151,11 @@
           "snat": "auto",
           "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}],
           "clientTLS": {"bigip": "/Common/clientTLS_SSL_FORWARD_PROXY"},
-          "serverTLS": {"bigip": "/Common/serverTLS_SSL_FORWARD_PROXY"}
+          "serverTLS": {"bigip": "/Common/serverTLS_SSL_FORWARD_PROXY"},
+          "iRules": ["/Common/Shared/explicitHttps_irule"]
         }
       }
     }
   }
 }
+
