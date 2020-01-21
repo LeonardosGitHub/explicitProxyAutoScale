@@ -157,7 +157,7 @@
           "persistenceMethods": [],
           "translateServerPort": false,
           "translateServerAddress": false,
-          "virtualPort": 4433,
+          "virtualPort": 443,
           "profileHTTP": {"bigip": "/Common/http"},
           "snat": "auto",
           "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}],
