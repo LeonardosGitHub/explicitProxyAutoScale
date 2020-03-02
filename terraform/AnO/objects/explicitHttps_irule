@@ -1,14 +1,54 @@
 when CLIENT_ACCEPTED {
-    set hsl [HSL::open -proto TCP -pool Shared/telemetry_pool]
-    set hsl_clientAccept "logType=\"httpsLog\",eventTimestamp=\"[clock seconds]\",bigipHostname=\"$static::tcl_platform(machine)\",clientIp=\"[IP::remote_addr clientside]\",clientPort=\"[TCP::client_port]\",proxyIp=\"[IP::local_addr clientside]\",proxyPort=\"[TCP::local_port clientside]\",virtualName=\"[virtual name]\",bytesToClient=\"[IP::stats bytes out]\",bytesToProxy=\"[IP::stats bytes in]\""
+    set hslhttps [HSL::open -proto TCP -pool Shared/telemetry_pool2]
+    set hsl_httpsclientAccept "logType=\"httpsLog\",eventTimestamp=\"[clock format [clock seconds] -format "%a, %d %h %Y %T GMT" -gmt 1]\",bigipHostname=\"$static::tcl_platform(machine)\",clientIp=\"[IP::remote_addr clientside]\",clientPort=\"[TCP::client_port]\",virtualName=\"[virtual name]\",bytesToClient=\"[IP::stats bytes out]\",bytesToProxy=\"[IP::stats bytes in]\""
 }
-when SERVERSSL_SERVERCERT {
-    set hsl_serversslServercert "sslCipherName=\"[SSL::cipher name]\",sslCipherBits=\"[SSL::cipher bits]\",sslCipherVersion=\"[SSL::cipher version]\",sslCertValid=\"[X509::verify_cert_error_string [SSL::verify_result]]\""
+when CLIENTSSL_HANDSHAKE {
+    set  hsl_httpsclientsslhandshake "CLIENTSSL_HANDSHAKE: sslCipherName=\"[SSL::cipher name]\",sslCipherBits=\"[SSL::cipher bits]\",sslCipherVersion=\"[SSL::cipher version]\",sslCertValid=\"[X509::verify_cert_error_string [SSL::verify_result]]\""
 }
 when HTTP_REQUEST {
-    set hsl_httpRequest "serverIP=\"[IP::local_addr]\",serverPort=\"[TCP::local_port]\",httpMethod=\"[HTTP::method]\",httpVersion=\"[HTTP::version]\",httpUri=\"[HTTP::uri]\",httpQuery=\"[HTTP::query]\",headerHost=\"[HTTP::host]\",headerXff=\"[HTTP::header X-forwared-XFF]\",headerContentType=\"[HTTP::header Content-Type]\",headerReferer=\"[HTTP::header Referer]\",headerUserAgent=\"[HTTP::header User-Agent]\""
+    set 403response 0
+    set hsl_httpshttpRequest "serverIP=\"[IP::local_addr]\",serverPort=\"[TCP::local_port]\",httpMethod=\"[HTTP::method]\",httpVersion=\"[HTTP::version]\",httpUri=\"[HTTP::uri]\",httpQuery=\"[HTTP::query]\",headerHost=\"[HTTP::host]\",headerXff=\"[HTTP::header X-forwared-XFF]\",headerContentType=\"[HTTP::header Content-Type]\",headerReferer=\"[HTTP::header Referer]\",headerUserAgent=\"[HTTP::header User-Agent]\""
+    switch [class exists Shared/[HTTP::host]] {
+        1 {
+            set hsl_httpswhitelistHost "whitelistHost=\"ACCEPTED\""
+            switch [class match [string tolower [HTTP::uri]] starts_with Shared/[HTTP::host]] {
+                "1" {
+                    set hsl_httpswhitelistURI "whitelistURI=\"ALLOWED\""
+                    }
+                default {
+                    set 403response 1
+                    set hsl_httpswhitelistURI "whitelistURI=\"DENIED\""
+                    set hsl_httpshttpResponse "httpStatus=\"403\""
+                    HTTP::close
+                    HTTP::respond 403
+                    HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+                    log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+                }
+            }
+        }
+        default {
+            set 403response 1
+            HTTP::close
+            HTTP::respond 403
+            set hsl_httpswhitelistHost "whitelistHost=\"DENIED\""
+            set hsl_httpswhitelistURI "whitelistURI=\"NOT_EVALUATED\""
+            set hsl_httpshttpResponse "httpStatus=\"403\""
+            HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+            log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+        }
+    }
 }
+ 
 when HTTP_RESPONSE {
-    set hsl_httpResponse "httpStatus=\"[HTTP::status]\""
-    HSL::send $hsl "$hsl_clientAccept,$hsl_serversslServercert,$hsl_httpRequest,$hsl_httpResponse"
+    if {$403response == 0} {
+        set hsl_httpshttpResponse "httpStatus=\"[HTTP::status]\""
+        HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+        log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+    }
+    else {
+        HTTP::respond 403
+        set hsl_httpshttpResponse "httpStatus=\"403\""
+        HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+        log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+    }
 }

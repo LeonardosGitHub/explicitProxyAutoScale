@@ -1,13 +1,18 @@
+when CLIENT_ACCEPTED {
+    set hslproxy [HSL::open -proto TCP -pool Shared/telemetry_pool]
+    set hsl_proxyclientAccept "logType=\"proxyLog\",eventTimestamp=\"[clock format [clock seconds] -format "%a, %d %h %Y %T GMT" -gmt 1]\",bigipHostname=\"$static::tcl_platform(machine)\",clientIp=\"[IP::remote_addr clientside]\",clientPort=\"[TCP::client_port]\",proxyIp=\"[IP::local_addr clientside]\",proxyPort=\"[TCP::local_port clientside]\",virtualName=\"[virtual name]\",bytesToClient=\"[IP::stats bytes out]\",bytesToProxy=\"[IP::stats bytes in]\""
+}
 when HTTP_PROXY_REQUEST {
-    set hslPrep "hostname=\"$static::tcl_platform(machine)\",client_ip=\"[IP::client_addr]\",server_ip=\"[IP::local_addr]\",http_method=\"[HTTP::method]\",http_host=\"[HTTP::uri]\",virtual_name=\"[virtual name]\",event_timestamp=\"[clock seconds]\""
-    set hsl [HSL::open -proto TCP -pool Shared/telemetry_pool]
-    switch [class match [string tolower [HTTP::uri]] contains Shared/explicitProxy_allowed_URLs_datagroup] {
+    set hsl_proxyhttpProxyReq "portReqByClient=\"[URI::port [HTTP::uri]]\",httpHost=\"[HTTP::uri]\",httpMethod=\"[HTTP::method]\",httpVersion=\"[HTTP::version]\""
+    switch [class exists Shared/[getfield [string tolower [HTTP::host]] ":" 1]] {
         1 {
-            HSL::send $hsl "event_source=\"ALLOWED_request_logging\",$hslPrep"
-            }
+            set hsl_proxywhitelistHost "whitelistHost=\"ACCEPTED\""
+        }
         default {
-            HSL::send $hsl "event_source=\"DENIED_request_logging\",$hslPrep"
             HTTP::respond 403
-            }
-    }
+            set hsl_proxywhitelistHost "whitelistHost=\"DENIED\""
+        }
+    }    
+    HSL::send $hslproxy "$hsl_proxyclientAccept,$hsl_proxyhttpProxyReq,$hsl_proxywhitelistHost"
+    log local0. "$hsl_proxyclientAccept,$hsl_proxyhttpProxyReq,$hsl_proxywhitelistHost"
 }
