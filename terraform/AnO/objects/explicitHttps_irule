@@ -4,6 +4,7 @@ when CLIENT_ACCEPTED {
 }
 when CLIENTSSL_HANDSHAKE {
     set  hsl_httpsclientsslhandshake "CLIENTSSL_HANDSHAKE: sslCipherName=\"[SSL::cipher name]\",sslCipherBits=\"[SSL::cipher bits]\",sslCipherVersion=\"[SSL::cipher version]\",sslCertValid=\"[X509::verify_cert_error_string [SSL::verify_result]]\""
+    set ext_count [SSL::extensions count]
 }
 when HTTP_REQUEST {
     set 403response 0
@@ -14,7 +15,10 @@ when HTTP_REQUEST {
             switch [class match [string tolower [HTTP::uri]] starts_with Shared/[HTTP::host]] {
                 "1" {
                     set hsl_httpswhitelistURI "whitelistURI=\"ALLOWED\""
-                    }
+                    HTTP::header insert X-Real-IP [IP::remote_addr clientside]
+                    HTTP::header insert X-Forwarded-For [IP::remote_addr clientside]
+                    if {[TCP::local_port] == 443} {HTTP::header insert X-Forwarded-Proto https}
+                }
                 default {
                     set 403response 1
                     set hsl_httpswhitelistURI "whitelistURI=\"DENIED\""
@@ -38,7 +42,6 @@ when HTTP_REQUEST {
         }
     }
 }
- 
 when HTTP_RESPONSE {
     if {$403response == 0} {
         set hsl_httpshttpResponse "httpStatus=\"[HTTP::status]\""

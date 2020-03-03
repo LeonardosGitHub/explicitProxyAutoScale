@@ -31,3 +31,5 @@ override.tf.json
 # Ansible ignore
 *.retry
 
+#Macbook
+.DS_Store
