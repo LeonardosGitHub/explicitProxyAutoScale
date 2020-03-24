@@ -10,16 +10,11 @@
             "cliInactivityTimeout": 1200,
             "consoleInactivityTimeout": 1200
         },
-        "pipelineUser": {
-            "class": "User",
-            "userType": "regular",
-            "password": "ch@ng3mEA$@p",
-            "shell": "bash",
-            "partitionAccess": {
-                "all-partitions": {
-                    "role": "admin"
-                }
-            }
+        "TS_Syslog": {
+            "class": "SyslogRemoteServer",
+            "host": "local-ip",
+            "localIp": "127.0.0.1",
+            "remotePort": 6514
         }
     }
 }

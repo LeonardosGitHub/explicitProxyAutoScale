@@ -33,3 +33,4 @@ override.tf.json
 
 #Macbook
 .DS_Store
+*.DS_Store
