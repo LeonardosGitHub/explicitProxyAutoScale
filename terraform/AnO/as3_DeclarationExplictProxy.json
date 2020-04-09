@@ -158,7 +158,7 @@
           "translateServerPort": false,
           "translateServerAddress": false,
           "virtualPort": 443,
-          "profileHTTP": {"use": "/Common/http"},
+          "profileHTTP": {"bigip": "/Common/http"},
           "snat": "auto",
           "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}],
           "clientTLS": {"bigip": "/Common/clientTLS_SSL_FORWARD_PROXY"},
