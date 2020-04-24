@@ -1,0 +1,183 @@
+{
+  "class": "AS3",
+  "action": "deploy",
+  "persist": true,
+  "declaration": {
+    "class": "ADC",
+    "schemaVersion": "3.12.0",
+    "label": "autoscale_ltm_withExplicitProxy",
+    "id": "autoscale_ltm",
+    "remark": "autoscale_ltm",
+    "Common": {
+      "class": "Tenant",
+      "Shared": {
+        "class": "Application",
+        "template": "shared",
+        "serviceAddress": {
+          "class": "Service_Address",
+          "virtualAddress": "0.0.0.0"
+        },
+        "explicitProxy_allowed_URLs_datagroup": {
+          "class": "Data_Group",
+          "keyDataType": "string",
+          "records": [
+            {
+              "key": "google.com"
+            },
+            {
+              "key": "f5.com"
+            }
+          ]
+        },
+        "www.f5.com": {
+          "class": "Data_Group",
+          "keyDataType": "string",
+          "records": [
+            {"key": "/"},
+            {"key": "/content"}
+          ]
+        },
+        "www.google.com": {
+          "class": "Data_Group",
+          "keyDataType": "string",
+          "records": [
+            {"key": "/maps"}
+          ]
+        },
+        "explicitProxy_irule": {
+          "class": "iRule",
+          "iRule": {
+            "base64": "d2hlbiBDTElFTlRfQUNDRVBURUQgewogICAgc2V0IGhzbHByb3h5IFtIU0w6Om9wZW4gLXByb3RvIFRDUCAtcG9vbCBTaGFyZWQvdGVsZW1ldHJ5X3Bvb2xdCiAgICBzZXQgaHNsX3Byb3h5Y2xpZW50QWNjZXB0ICJsb2dUeXBlPVwicHJveHlMb2dcIixldmVudFRpbWVzdGFtcD1cIltjbG9jayBmb3JtYXQgW2Nsb2NrIHNlY29uZHNdIC1mb3JtYXQgIiVhLCAlZCAlaCAlWSAlVCBHTVQiIC1nbXQgMV1cIixiaWdpcEhvc3RuYW1lPVwiJHN0YXRpYzo6dGNsX3BsYXRmb3JtKG1hY2hpbmUpXCIsY2xpZW50SXA9XCJbSVA6OnJlbW90ZV9hZGRyIGNsaWVudHNpZGVdXCIsY2xpZW50UG9ydD1cIltUQ1A6OmNsaWVudF9wb3J0XVwiLHByb3h5SXA9XCJbSVA6OmxvY2FsX2FkZHIgY2xpZW50c2lkZV1cIixwcm94eVBvcnQ9XCJbVENQOjpsb2NhbF9wb3J0IGNsaWVudHNpZGVdXCIsdmlydHVhbE5hbWU9XCJbdmlydHVhbCBuYW1lXVwiLGJ5dGVzVG9DbGllbnQ9XCJbSVA6OnN0YXRzIGJ5dGVzIG91dF1cIixieXRlc1RvUHJveHk9XCJbSVA6OnN0YXRzIGJ5dGVzIGluXVwiIgp9CndoZW4gSFRUUF9QUk9YWV9SRVFVRVNUIHsKICAgIHNldCBoc2xfcHJveHlodHRwUHJveHlSZXEgInBvcnRSZXFCeUNsaWVudD1cIltVUkk6OnBvcnQgW0hUVFA6OnVyaV1dXCIsaHR0cEhvc3Q9XCJbSFRUUDo6dXJpXVwiLGh0dHBNZXRob2Q9XCJbSFRUUDo6bWV0aG9kXVwiLGh0dHBWZXJzaW9uPVwiW0hUVFA6OnZlcnNpb25dXCIiCiAgICBpZiB7W2NsYXNzIGV4aXN0cyBTaGFyZWQvW2dldGZpZWxkIFtzdHJpbmcgdG9sb3dlciBbSFRUUDo6aG9zdF1dICI6IiAxXV19IHsKICAgICAgICAgICAgc2V0IGhzbF9wcm94eXdoaXRlbGlzdEhvc3QgIndoaXRlbGlzdEhvc3Q9XCJBQ0NFUFRFRFwiIgogICAgICAgIH0KICAgIGVsc2VpZiB7W2NsYXNzIG1hdGNoIFtnZXRmaWVsZCBbc3RyaW5nIHRvbG93ZXIgW0hUVFA6Omhvc3RdXSAiOiIgMV0gZXF1YWxzIFNoYXJlZC9leHBsaWNpdFByb3h5X2FsbG93ZWRfVVJMc19kYXRhZ3JvdXBdfSB7CiAgICAgICAgICAgIHNldCBoc2xfcHJveHl3aGl0ZWxpc3RIb3N0ICJ3aGl0ZWxpc3RIb3N0PVwiQUNDRVBURURcIiIKICAgICAgICB9CiAgICBlbHNlIHsKICAgICAgICAgICAgSFRUUDo6cmVzcG9uZCA0MDMKICAgICAgICAgICAgc2V0IGhzbF9wcm94eXdoaXRlbGlzdEhvc3QgIndoaXRlbGlzdEhvc3Q9XCJERU5JRURcIiIKICAgICAgICB9CiAgICBIU0w6OnNlbmQgJGhzbHByb3h5ICIkaHNsX3Byb3h5Y2xpZW50QWNjZXB0LCRoc2xfcHJveHlodHRwUHJveHlSZXEsJGhzbF9wcm94eXdoaXRlbGlzdEhvc3QiCiAgICBsb2cgbG9jYWwwLiAiJGhzbF9wcm94eWNsaWVudEFjY2VwdCwkaHNsX3Byb3h5aHR0cFByb3h5UmVxLCRoc2xfcHJveHl3aGl0ZWxpc3RIb3N0Igp9"
+          }
+        },
+        "explicitHttps_irule": {
+          "class": "iRule",
+          "iRule": {
+            "base64": "d2hlbiBDTElFTlRfQUNDRVBURUQgewogICAgc2V0IGhzbGh0dHBzIFtIU0w6Om9wZW4gLXByb3RvIFRDUCAtcG9vbCBTaGFyZWQvdGVsZW1ldHJ5X3Bvb2wyXQogICAgc2V0IGhzbF9odHRwc2NsaWVudEFjY2VwdCAibG9nVHlwZT1cImh0dHBzTG9nXCIsZXZlbnRUaW1lc3RhbXA9XCJbY2xvY2sgZm9ybWF0IFtjbG9jayBzZWNvbmRzXSAtZm9ybWF0ICIlYSwgJWQgJWggJVkgJVQgR01UIiAtZ210IDFdXCIsYmlnaXBIb3N0bmFtZT1cIiRzdGF0aWM6OnRjbF9wbGF0Zm9ybShtYWNoaW5lKVwiLGNsaWVudElwPVwiW0lQOjpyZW1vdGVfYWRkciBjbGllbnRzaWRlXVwiLGNsaWVudFBvcnQ9XCJbVENQOjpjbGllbnRfcG9ydF1cIix2aXJ0dWFsTmFtZT1cIlt2aXJ0dWFsIG5hbWVdXCIsYnl0ZXNUb0NsaWVudD1cIltJUDo6c3RhdHMgYnl0ZXMgb3V0XVwiLGJ5dGVzVG9Qcm94eT1cIltJUDo6c3RhdHMgYnl0ZXMgaW5dXCIiCn0Kd2hlbiBDTElFTlRTU0xfSEFORFNIQUtFIHsKICAgIHNldCAgaHNsX2h0dHBzY2xpZW50c3NsaGFuZHNoYWtlICJDTElFTlRTU0xfSEFORFNIQUtFOiBzc2xDaXBoZXJOYW1lPVwiW1NTTDo6Y2lwaGVyIG5hbWVdXCIsc3NsQ2lwaGVyQml0cz1cIltTU0w6OmNpcGhlciBiaXRzXVwiLHNzbENpcGhlclZlcnNpb249XCJbU1NMOjpjaXBoZXIgdmVyc2lvbl1cIixzc2xDZXJ0VmFsaWQ9XCJbWDUwOTo6dmVyaWZ5X2NlcnRfZXJyb3Jfc3RyaW5nIFtTU0w6OnZlcmlmeV9yZXN1bHRdXVwiIgogICAgc2V0IGV4dF9jb3VudCBbU1NMOjpleHRlbnNpb25zIGNvdW50XQp9CndoZW4gSFRUUF9SRVFVRVNUIHsKICAgIHNldCA0MDNyZXNwb25zZSAwCiAgICBzZXQgaHNsX2h0dHBzaHR0cFJlcXVlc3QgInNlcnZlcklQPVwiW0lQOjpsb2NhbF9hZGRyXVwiLHNlcnZlclBvcnQ9XCJbVENQOjpsb2NhbF9wb3J0XVwiLGh0dHBNZXRob2Q9XCJbSFRUUDo6bWV0aG9kXVwiLGh0dHBWZXJzaW9uPVwiW0hUVFA6OnZlcnNpb25dXCIsaHR0cFVyaT1cIltIVFRQOjp1cmldXCIsaHR0cFF1ZXJ5PVwiW0hUVFA6OnF1ZXJ5XVwiLGhlYWRlckhvc3Q9XCJbSFRUUDo6aG9zdF1cIixoZWFkZXJYZmY9XCJbSFRUUDo6aGVhZGVyIFgtZm9yd2FyZWQtWEZGXVwiLGhlYWRlckNvbnRlbnRUeXBlPVwiW0hUVFA6OmhlYWRlciBDb250ZW50LVR5cGVdXCIsaGVhZGVyUmVmZXJlcj1cIltIVFRQOjpoZWFkZXIgUmVmZXJlcl1cIixoZWFkZXJVc2VyQWdlbnQ9XCJbSFRUUDo6aGVhZGVyIFVzZXItQWdlbnRdXCIiCiAgICBpZiB7IFtjbGFzcyBleGlzdHMgU2hhcmVkL1tIVFRQOjpob3N0XV0gfSB7CiAgICAgICAgc2V0IGhzbF9odHRwc3doaXRlbGlzdEhvc3QgIndoaXRlbGlzdEhvc3Q9XCJBQ0NFUFRFRFwiIgogICAgICAgIGlmIHsgW2NsYXNzIG1hdGNoIFtzdHJpbmcgdG9sb3dlciBbSFRUUDo6dXJpXV0gc3RhcnRzX3dpdGggU2hhcmVkL1tIVFRQOjpob3N0XV0gfSB7CiAgICAgICAgICAgIHNldCBoc2xfaHR0cHN3aGl0ZWxpc3RVUkkgIndoaXRlbGlzdFVSST1cIkFMTE9XRURcIiIKICAgICAgICAgICAgSFRUUDo6aGVhZGVyIGluc2VydCBYLVJlYWwtSVAgW0lQOjpyZW1vdGVfYWRkciBjbGllbnRzaWRlXQogICAgICAgICAgICBIVFRQOjpoZWFkZXIgaW5zZXJ0IFgtRm9yd2FyZGVkLUZvciBbSVA6OnJlbW90ZV9hZGRyIGNsaWVudHNpZGVdCiAgICAgICAgICAgIGlmIHtbVENQOjpsb2NhbF9wb3J0XSA9PSA0NDN9IHsKICAgICAgICAgICAgICAgIEhUVFA6OmhlYWRlciBpbnNlcnQgWC1Gb3J3YXJkZWQtUHJvdG8gaHR0cHMKICAgICAgICAgICAgfQogICAgICAgICB9CiAgICAgICAgIGVsc2UgewogICAgICAgICAgICBzZXQgNDAzcmVzcG9uc2UgMQogICAgICAgICAgICBzZXQgaHNsX2h0dHBzd2hpdGVsaXN0VVJJICJ3aGl0ZWxpc3RVUkk9XCJERU5JRURcIiIKICAgICAgICAgICAgc2V0IGhzbF9odHRwc2h0dHBSZXNwb25zZSAiaHR0cFN0YXR1cz1cIjQwM1wiIgogICAgICAgICAgICBIVFRQOjpjbG9zZQogICAgICAgICAgICBIVFRQOjpyZXNwb25kIDQwMwogICAgICAgICAgICBIU0w6OnNlbmQgJGhzbGh0dHBzICIkaHNsX2h0dHBzY2xpZW50QWNjZXB0LCRoc2xfaHR0cHNjbGllbnRzc2xoYW5kc2hha2UsJGhzbF9odHRwc2h0dHBSZXF1ZXN0LCRoc2xfaHR0cHNodHRwUmVzcG9uc2UsJGhzbF9odHRwc3doaXRlbGlzdEhvc3QsJGhzbF9odHRwc3doaXRlbGlzdFVSSSIKICAgICAgICAgICAgbG9nIGxvY2FsMC4gIiRoc2xfaHR0cHNjbGllbnRBY2NlcHQsJGhzbF9odHRwc2NsaWVudHNzbGhhbmRzaGFrZSwkaHNsX2h0dHBzaHR0cFJlcXVlc3QsJGhzbF9odHRwc2h0dHBSZXNwb25zZSwkaHNsX2h0dHBzd2hpdGVsaXN0SG9zdCwkaHNsX2h0dHBzd2hpdGVsaXN0VVJJIgogICAgICAgICB9CiAgICAgfQogICAgZWxzZWlmIHsgW2NsYXNzIG1hdGNoIFtzdHJpbmcgdG9sb3dlciBbSFRUUDo6aG9zdF1dIGVxdWFscyBTaGFyZWQvZXhwbGljaXRQcm94eV9hbGxvd2VkX1VSTHNfZGF0YWdyb3VwXSB9IHsKICAgICAgICBzZXQgaHNsX2h0dHBzd2hpdGVsaXN0SG9zdCAid2hpdGVsaXN0SG9zdD1cIkFDQ0VQVEVEXCIiCiAgICAgICAgc2V0IGhzbF9odHRwc3doaXRlbGlzdFVSSSAid2hpdGVsaXN0VVJJPVwiTk9UX0VWQUxVQVRFRFwiIgogICAgICAgIEhUVFA6OmhlYWRlciBpbnNlcnQgWC1SZWFsLUlQIFtJUDo6cmVtb3RlX2FkZHIgY2xpZW50c2lkZV0KICAgICAgICBIVFRQOjpoZWFkZXIgaW5zZXJ0IFgtRm9yd2FyZGVkLUZvciBbSVA6OnJlbW90ZV9hZGRyIGNsaWVudHNpZGVdCiAgICAgICAgaWYge1tUQ1A6OmxvY2FsX3BvcnRdID09IDQ0M30gewogICAgICAgICAgICBIVFRQOjpoZWFkZXIgaW5zZXJ0IFgtRm9yd2FyZGVkLVByb3RvIGh0dHBzCiAgICAgICAgfQogICAgfQogICAgIGVsc2UgewogICAgICAgIHNldCA0MDNyZXNwb25zZSAxCiAgICAgICAgc2V0IGhzbF9odHRwc3doaXRlbGlzdFVSSSAid2hpdGVsaXN0VVJJPVwiTk9UX0VWQUxVQVRFRFwiIgogICAgICAgIHNldCBoc2xfaHR0cHN3aGl0ZWxpc3RIb3N0ICJ3aGl0ZWxpc3RIb3N0PVwiREVOSUVEXCIiCiAgICAgICAgc2V0IGhzbF9odHRwc2h0dHBSZXNwb25zZSAiaHR0cFN0YXR1cz1cIjQwM1wiIgogICAgICAgIEhUVFA6OmNsb3NlCiAgICAgICAgSFRUUDo6cmVzcG9uZCA0MDMKICAgICAgICBIU0w6OnNlbmQgJGhzbGh0dHBzICIkaHNsX2h0dHBzY2xpZW50QWNjZXB0LCRoc2xfaHR0cHNjbGllbnRzc2xoYW5kc2hha2UsJGhzbF9odHRwc2h0dHBSZXF1ZXN0LCRoc2xfaHR0cHNodHRwUmVzcG9uc2UsJGhzbF9odHRwc3doaXRlbGlzdEhvc3QsJGhzbF9odHRwc3doaXRlbGlzdFVSSSIKICAgICAgICBsb2cgbG9jYWwwLiAiJGhzbF9odHRwc2NsaWVudEFjY2VwdCwkaHNsX2h0dHBzY2xpZW50c3NsaGFuZHNoYWtlLCRoc2xfaHR0cHNodHRwUmVxdWVzdCwkaHNsX2h0dHBzaHR0cFJlc3BvbnNlLCRoc2xfaHR0cHN3aGl0ZWxpc3RIb3N0LCRoc2xfaHR0cHN3aGl0ZWxpc3RVUkkiCiAgICAgIH0KfQp3aGVuIEhUVFBfUkVTUE9OU0UgewogICAgaWYgeyQ0MDNyZXNwb25zZSA9PSAwfSB7CiAgICAgICAgc2V0IGhzbF9odHRwc2h0dHBSZXNwb25zZSAiaHR0cFN0YXR1cz1cIltIVFRQOjpzdGF0dXNdXCIiCiAgICAgICAgSFNMOjpzZW5kICRoc2xodHRwcyAiJGhzbF9odHRwc2NsaWVudEFjY2VwdCwkaHNsX2h0dHBzY2xpZW50c3NsaGFuZHNoYWtlLCRoc2xfaHR0cHNodHRwUmVxdWVzdCwkaHNsX2h0dHBzaHR0cFJlc3BvbnNlLCRoc2xfaHR0cHN3aGl0ZWxpc3RIb3N0LCRoc2xfaHR0cHN3aGl0ZWxpc3RVUkkiCiAgICAgICAgbG9nIGxvY2FsMC4gIiRoc2xfaHR0cHNjbGllbnRBY2NlcHQsJGhzbF9odHRwc2NsaWVudHNzbGhhbmRzaGFrZSwkaHNsX2h0dHBzaHR0cFJlcXVlc3QsJGhzbF9odHRwc2h0dHBSZXNwb25zZSwkaHNsX2h0dHBzd2hpdGVsaXN0SG9zdCwkaHNsX2h0dHBzd2hpdGVsaXN0VVJJIgogICAgfQogICAgZWxzZSB7CiAgICAgICAgSFRUUDo6cmVzcG9uZCA0MDMKICAgICAgICBzZXQgaHNsX2h0dHBzaHR0cFJlc3BvbnNlICJodHRwU3RhdHVzPVwiNDAzXCIiCiAgICAgICAgSFNMOjpzZW5kICRoc2xodHRwcyAiJGhzbF9odHRwc2NsaWVudEFjY2VwdCwkaHNsX2h0dHBzY2xpZW50c3NsaGFuZHNoYWtlLCRoc2xfaHR0cHNodHRwUmVxdWVzdCwkaHNsX2h0dHBzaHR0cFJlc3BvbnNlLCRoc2xfaHR0cHN3aGl0ZWxpc3RIb3N0LCRoc2xfaHR0cHN3aGl0ZWxpc3RVUkkiCiAgICAgICAgbG9nIGxvY2FsMC4gIiRoc2xfaHR0cHNjbGllbnRBY2NlcHQsJGhzbF9odHRwc2NsaWVudHNzbGhhbmRzaGFrZSwkaHNsX2h0dHBzaHR0cFJlcXVlc3QsJGhzbF9odHRwc2h0dHBSZXNwb25zZSwkaHNsX2h0dHBzd2hpdGVsaXN0SG9zdCwkaHNsX2h0dHBzd2hpdGVsaXN0VVJJIgogICAgfQp9"
+          }
+        },
+        "telemetry_local_rule": {
+          "remark": "Only required when TS is a local listener",
+          "class": "iRule",
+          "iRule": "when CLIENT_ACCEPTED {\n  node 127.0.0.1 6514\n}"
+        },
+        "telemetry_local": {
+          "remark": "Only required when TS is a local listener",
+          "class": "Service_TCP",
+          "virtualAddresses": [
+            "255.255.255.254"
+          ],
+          "virtualPort": 6514,
+          "iRules": [
+            "telemetry_local_rule"
+          ]
+        },
+        "telemetry_pool": {
+          "class": "Pool",
+          "members": [
+            {
+              "enable": true,
+              "serverAddresses": [
+                "255.255.255.254"
+              ],
+              "servicePort": 6514
+            }
+          ],
+          "monitors": [
+            {
+              "bigip": "/Common/tcp"
+            }
+          ]
+        },
+        "telemetry_pool2": {
+          "class": "Pool",
+          "members": [
+            {
+              "enable": true,
+              "serverAddresses": [
+                "255.255.255.254"
+              ],
+              "servicePort": 6514
+            }
+          ],
+          "monitors": [
+            {
+              "bigip": "/Common/tcp"
+            }
+          ]
+        },
+        "telemetry_hsl": {
+          "class": "Log_Destination",
+          "type": "remote-high-speed-log",
+          "protocol": "tcp",
+          "pool": {
+            "use": "telemetry_pool"
+          }
+        },
+        "telemetry_publisher": {
+          "class": "Log_Publisher",
+          "destinations": [
+          {
+            "use": "telemetry_hsl"
+          }
+          ]
+        }
+      }
+    },
+    "ExplicitProxy" : {
+      "class": "Tenant",
+      "explicitProxy": {
+        "class": "Application",
+        "template": "generic",
+        "explicitProxyVS": {
+          "class": "Service_HTTP",
+          "layer4": "tcp",
+          "virtualAddresses": [
+            {
+              "use": "/Common/Shared/serviceAddress"
+            }
+          ],
+          "persistenceMethods": [],
+          "virtualPort": 10443,
+          "profileHTTP": {"use": "explicitProxyhttp_profile"},
+          "snat": "auto",
+          "allowVlans": [{"bigip":"/Common/internal"}],
+          "iRules": ["/Common/Shared/explicitProxy_irule"]
+        },
+        "explicitProxyhttp_profile": {
+          "class": "HTTP_Profile",
+          "proxyType": "explicit",
+          "requestChunking": "rechunk",
+          "responseChunking": "rechunk",
+          "resolver": {"bigip": "/Common/explicitProxy_resolver"},
+          "tunnelName": "/Common/explicitProxy_tunnel"
+        },
+        "explicitProxyL4_profile": {
+          "class": "L4_Profile",
+          "looseClose": true,
+          "looseInitialization": true
+        },
+        "explicitProxy_HTTPS_VS": {
+          "class": "Service_HTTPS",
+          "layer4": "tcp",
+          "redirect80": false,
+          "virtualAddresses": [
+            {
+              "use": "/Common/Shared/serviceAddress"
+            }
+          ],
+          "persistenceMethods": [],
+          "translateServerPort": false,
+          "translateServerAddress": false,
+          "virtualPort": 443,
+          "profileHTTP": {"bigip": "/Common/http"},
+          "snat": "auto",
+          "allowVlans": [{"bigip":"/Common/explicitProxy_tunnel"}],
+          "clientTLS": {"bigip": "/Common/clientTLS_SSL_FORWARD_PROXY"},
+          "serverTLS": {"bigip": "/Common/serverTLS_SSL_FORWARD_PROXY"},
+          "iRules": ["/Common/Shared/explicitHttps_irule"]
+        }
+      }
+    }
+  }
+}

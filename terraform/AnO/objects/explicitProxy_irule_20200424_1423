@@ -4,16 +4,19 @@ when CLIENT_ACCEPTED {
 }
 when HTTP_PROXY_REQUEST {
     set hsl_proxyhttpProxyReq "portReqByClient=\"[URI::port [HTTP::uri]]\",httpHost=\"[HTTP::uri]\",httpMethod=\"[HTTP::method]\",httpVersion=\"[HTTP::version]\""
-    if {[class match [getfield [string tolower [HTTP::host]] ":" 1] equals Shared/explicitProxy_allowed_URLs_datagroup]} {
+    if {[getfield [string tolower [HTTP::host]] ":" 2] == 443 }{
+        if {[class match [getfield [string tolower [HTTP::host]] ":" 1] equals Shared/explicitProxy_allowed_hostnames_datagroup]} {
             set hsl_proxywhitelistHost "whitelistHost=\"ACCEPTED\""
         }
-    elseif {[class exists Shared/[getfield [string tolower [HTTP::host]] ":" 1]]} {
-            set hsl_proxywhitelistHost "whitelistHost=\"ACCEPTED\""
-        }
-    else {
+        else {
             HTTP::respond 403
             set hsl_proxywhitelistHost "whitelistHost=\"DENIED\""
         }
+    }
+    else {
+        HTTP::respond 403
+        set hsl_proxywhitelistHost "whitelistHost=\"DENIED\""
+    }
     HSL::send $hslproxy "$hsl_proxyclientAccept,$hsl_proxyhttpProxyReq,$hsl_proxywhitelistHost"
     log local0. "$hsl_proxyclientAccept,$hsl_proxyhttpProxyReq,$hsl_proxywhitelistHost"
 }
