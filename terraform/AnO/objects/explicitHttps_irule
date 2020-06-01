@@ -1,45 +1,67 @@
 when CLIENT_ACCEPTED {
     set hslhttps [HSL::open -proto TCP -pool Shared/telemetry_pool2]
     set hsl_httpsclientAccept "logType=\"httpsLog\",eventTimestamp=\"[clock format [clock seconds] -format "%a, %d %h %Y %T GMT" -gmt 1]\",bigipHostname=\"$static::tcl_platform(machine)\",clientIp=\"[IP::remote_addr clientside]\",clientPort=\"[TCP::client_port]\",virtualName=\"[virtual name]\",bytesToClient=\"[IP::stats bytes out]\",bytesToProxy=\"[IP::stats bytes in]\""
+    set opt28 [TCP::option get 28]
+    log local0. $opt28
+    if {[info exists opt28]} {
+        binary scan $opt28 cH8 ver addr
+        scan $addr "%2x%2x%2x%2x" ip1 ip2 ip3 ip4
+        set v2_sourceAddress "$ip1.$ip2.$ip3.$ip4"
+        #log local0. "opt28 client address from proxy protocol: $optaddr"
+    }
+    log local0. $v2_sourceAddress
+    if {[info exists $v2_sourceAddress]} {
+        log local0. "in the if [info exists v2_sourceAddress]"
+    }
 }
 when CLIENTSSL_HANDSHAKE {
-    set  hsl_httpsclientsslhandshake "CLIENTSSL_HANDSHAKE: sslCipherName=\"[SSL::cipher name]\",sslCipherBits=\"[SSL::cipher bits]\",sslCipherVersion=\"[SSL::cipher version]\",sslCertValid=\"[X509::verify_cert_error_string [SSL::verify_result]]\""
-    set ext_count [SSL::extensions count]
+    set hsl_httpsclientsslhandshake "sslCipherName=\"[SSL::cipher name]\",sslCipherBits=\"[SSL::cipher bits]\",sslCipherVersion=\"[SSL::cipher version]\",sslCertValid=\"[X509::verify_cert_error_string [SSL::verify_result]]\""
 }
 when HTTP_REQUEST {
     set 403response 0
     set hsl_httpshttpRequest "serverIP=\"[IP::local_addr]\",serverPort=\"[TCP::local_port]\",httpMethod=\"[HTTP::method]\",httpVersion=\"[HTTP::version]\",httpUri=\"[HTTP::uri]\",httpQuery=\"[HTTP::query]\",headerHost=\"[HTTP::host]\",headerXff=\"[HTTP::header X-forwared-XFF]\",headerContentType=\"[HTTP::header Content-Type]\",headerReferer=\"[HTTP::header Referer]\",headerUserAgent=\"[HTTP::header User-Agent]\""
-    switch [class exists Shared/[HTTP::host]] {
-        1 {
-            set hsl_httpswhitelistHost "whitelistHost=\"ACCEPTED\""
-            switch [class match [string tolower [HTTP::uri]] starts_with Shared/[HTTP::host]] {
-                "1" {
+    if {[info exists v2_sourceAddress]} {
+        set srcDatagroup [class match -value $v2_sourceAddress equals srcipToDatagroup]
+        log local0. "srcDatagroup: $srcDatagroup"
+        if {[info exists srcDatagroup]} {
+            set get_uri_datagroup  [class match -value [string tolower [HTTP::host]] equals $srcDatagroup]
+            if {[info exists get_uri_datagroup]} {
+                if {[class match [string tolower [HTTP::host]] equals $srcDatagroup] && [class match [string tolower [HTTP::uri]] starts_with $get_uri_datagroup]} {
+                    set hsl_httpswhitelistHost "whitelistHost=\"ACCEPTED\""
                     set hsl_httpswhitelistURI "whitelistURI=\"ALLOWED\""
                     HTTP::header insert X-Real-IP [IP::remote_addr clientside]
                     HTTP::header insert X-Forwarded-For [IP::remote_addr clientside]
-                    if {[TCP::local_port] == 443} {HTTP::header insert X-Forwarded-Proto https}
+                    HTTP::header insert X-Forwarded-Proto https
                 }
-                default {
+                else {
+                    log local0. "Failed to match Host with URI"
                     set 403response 1
-                    set hsl_httpswhitelistURI "whitelistURI=\"DENIED\""
-                    set hsl_httpshttpResponse "httpStatus=\"403\""
-                    HTTP::close
-                    HTTP::respond 403
-                    HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
-                    log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
                 }
             }
-        }
-        default {
+            else {
+                log local0. "Unable to map hostname datagroup to URI data group"
+                set 403response 1
+                }
+        } 
+        else {
+            log local0. "Unable to map source IP to hostname data group doesn't exist"
             set 403response 1
-            HTTP::close
-            HTTP::respond 403
-            set hsl_httpswhitelistHost "whitelistHost=\"DENIED\""
-            set hsl_httpswhitelistURI "whitelistURI=\"NOT_EVALUATED\""
-            set hsl_httpshttpResponse "httpStatus=\"403\""
-            HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
-            log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
-        }
+            }
+    } 
+    else {
+        log local0. "v2_sourceAddress doesn't exist"
+        set 403response 1
+    }
+    if {$403response == 1} {
+        set 403response 1
+        set hsl_httpswhitelistHost "whitelistHost=\"ACCEPTED\""
+        set hsl_httpswhitelistURI "whitelistURI=\"DENIED\""
+        set hsl_httpshttpResponse "httpStatus=\"403\""
+        HTTP::close
+        HTTP::respond 403
+        HSL::send $hslhttps "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+        log local0. "$hsl_httpsclientAccept,$hsl_httpsclientsslhandshake,$hsl_httpshttpRequest,$hsl_httpshttpResponse,$hsl_httpswhitelistHost,$hsl_httpswhitelistURI"
+        log local0. "Did not receive SourceIP address via TCP header option 28, responding 403"
     }
 }
 when HTTP_RESPONSE {

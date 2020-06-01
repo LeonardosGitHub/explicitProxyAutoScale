@@ -1,19 +1,51 @@
 when CLIENT_ACCEPTED {
     set hslproxy [HSL::open -proto TCP -pool Shared/telemetry_pool]
     set hsl_proxyclientAccept "logType=\"proxyLog\",eventTimestamp=\"[clock format [clock seconds] -format "%a, %d %h %Y %T GMT" -gmt 1]\",bigipHostname=\"$static::tcl_platform(machine)\",clientIp=\"[IP::remote_addr clientside]\",clientPort=\"[TCP::client_port]\",proxyIp=\"[IP::local_addr clientside]\",proxyPort=\"[TCP::local_port clientside]\",virtualName=\"[virtual name]\",bytesToClient=\"[IP::stats bytes out]\",bytesToProxy=\"[IP::stats bytes in]\""
+    TCP::collect
 }
+when SERVER_INIT {
+    if {[info exists v2_sourceAddress]}{
+        scan $v2_sourceAddress {%d.%d.%d.%d.} a b c d
+        TCP::option set 28 [binary format ccccc {1} $a $b $c $d] all
+        #log local0. "Set option 28: v1 with ClientAddr: $v2_sourceAddress"
+    }
+}
+
 when HTTP_PROXY_REQUEST {
+    set 403response 0
     set hsl_proxyhttpProxyReq "portReqByClient=\"[URI::port [HTTP::uri]]\",httpHost=\"[HTTP::uri]\",httpMethod=\"[HTTP::method]\",httpVersion=\"[HTTP::version]\""
-    if {[class match [getfield [string tolower [HTTP::host]] ":" 1] equals Shared/explicitProxy_allowed_URLs_datagroup]} {
-            set hsl_proxywhitelistHost "whitelistHost=\"ACCEPTED\""
+    if {[info exists v2_sourceAddress]} {
+        set srcDatagroup [class match -value $v2_sourceAddress equals srcipToDatagroup]
+        if {[catch $srcDatagroup]} {
+            if {[getfield [string tolower [HTTP::host]] ":" 2] == 443 }{
+                if {[class match [getfield [string tolower [HTTP::host]] ":" 1] equals $srcDatagroup]} {
+                    set hsl_proxywhitelistHost "whitelistHost=\"ACCEPTED\""
+                }
+                else {
+                    set 403response 1
+                    set hsl_proxywhitelistHost "whitelistHost=\"DENIED\""
+                }
+            }
+            else {
+                set 403response 1
+                #log local0. "Host header port was not 443, responding with 403"
+            }
         }
-    elseif {[class exists Shared/[getfield [string tolower [HTTP::host]] ":" 1]]} {
-            set hsl_proxywhitelistHost "whitelistHost=\"ACCEPTED\""
+        else {
+            set 403response 1
+            #log local0. "A mapping of source IP to datagroup was not found, responding with 403"
         }
+    }
     else {
-            HTTP::respond 403
-            set hsl_proxywhitelistHost "whitelistHost=\"DENIED\""
-        }
+        set 403response 1
+        #log local0. "The Proxy v2 iRule did not product a source IP, unable to allow traffic, responding with 403"
+    }
+    if {$403response == 1} {
+        #log local0. "HTTP Host not allowed"
+        HTTP::close
+        HTTP::respond 403
+        set hsl_proxywhitelistHost "whitelistHost=\"DENIED\""
+    }
     HSL::send $hslproxy "$hsl_proxyclientAccept,$hsl_proxyhttpProxyReq,$hsl_proxywhitelistHost"
     log local0. "$hsl_proxyclientAccept,$hsl_proxyhttpProxyReq,$hsl_proxywhitelistHost"
 }
