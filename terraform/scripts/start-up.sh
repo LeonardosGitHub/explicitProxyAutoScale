@@ -310,7 +310,7 @@ write_files:
     tmsh install sys crypto key SSL_FORWARD_PROXY.key from-local-file /config/cloud/dependencies/policy/$${sslCertName}.key
     tmsh create ltm profile client-ssl serverTLS_SSL_FORWARD_PROXY {cert-key-chain replace-all-with { SSL_FWD_ExProxy { cert $${sslCertName}.crt key $${sslCertName}.key  usage CA} default {cert default.crt key default.key } } cert-lookup-by-ipaddr-port disabled defaults-from clientssl mode enabled ssl-forward-proxy enabled }
     tmsh create ltm profile server-ssl clientTLS_SSL_FORWARD_PROXY { defaults-from serverssl ssl-forward-proxy enabled }
-    tmsh create ltm profile tcp tcpOpt23 {defaults-from f5-tcp-progressive tcp-options "{28 first}"}
+    tmsh create ltm profile tcp tcpOpt28 {defaults-from f5-tcp-progressive tcp-options "{28 first}"}
 
     # Below is needed if ever we try and change the managementGuiPort to soemthing other than 8443
     # tmsh modify sys httpd ssl-port $${managementGuiPort}

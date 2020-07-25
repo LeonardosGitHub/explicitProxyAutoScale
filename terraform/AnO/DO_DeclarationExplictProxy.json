@@ -12,7 +12,7 @@
         },
         "TS_Syslog": {
             "class": "SyslogRemoteServer",
-            "host": "local-ip",
+            "host": "127.0.0.1",
             "localIp": "127.0.0.1",
             "remotePort": 6514
         }
